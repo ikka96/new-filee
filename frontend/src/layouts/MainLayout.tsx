@@ -8,14 +8,29 @@ interface Props {
 
 const MainLayout = ({ children }: Props) => {
   return (
-    <Box sx={{ display: "flex", height: "100vh" }}>
+    <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
+      
       {/* Sidebar */}
       <Sidebar />
 
-      {/* Main Content */}
-      <Box sx={{ flexGrow: 1 }}>
+      {/* Right Section */}
+      <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+        
+        {/* Top Navbar */}
         <Navbar />
-        <Box sx={{ p: 3 }}>{children}</Box>
+
+        {/* Page Content */}
+        <Box
+          sx={{
+            flexGrow: 1,
+            p: 3,
+            overflowY: "auto",
+            bgcolor: "#f4f6f8",
+          }}
+        >
+          {children}
+        </Box>
+
       </Box>
     </Box>
   );

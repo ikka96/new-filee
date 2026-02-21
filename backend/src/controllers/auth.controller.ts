@@ -98,7 +98,9 @@ export const login = async (req: Request, res: Response) => {
     });
 
     if (!user || !user.isVerified) {
-      return res.status(401).json({ message: "Invalid credentials or not verified" });
+      return res
+        .status(401)
+        .json({ message: "Invalid credentials or not verified" });
     }
 
     const isMatch = await bcrypt.compare(password, user.passwordHash);
@@ -119,5 +121,101 @@ export const login = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Login Error:", error);
     return res.status(500).json({ message: "Login failed" });
+  }
+};
+
+/* ===================== FORGOT PASSWORD ===================== */
+export const forgotPassword = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({ message: "Email is required" });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const otp = generateOTP();
+    const otpExpiresAt = getOtpExpiry();
+
+    await prisma.user.update({
+      where: { email },
+      data: {
+        otpCode: otp,
+        otpExpiresAt,
+      },
+    });
+
+    await sendOtpEmail(email, otp);
+
+    return res.json({ message: "Password reset OTP sent to email" });
+  } catch (error) {
+    console.error("Forgot Password Error:", error);
+    return res.status(500).json({ message: "Failed to send reset OTP" });
+  }
+};
+
+/* ===================== VERIFY RESET OTP ===================== */
+export const verifyResetOtp = async (req: Request, res: Response) => {
+  try {
+    const { email, otp } = req.body;
+
+    if (!email || !otp) {
+      return res.status(400).json({ message: "Missing fields" });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (!user || !user.otpCode || !user.otpExpiresAt) {
+      return res.status(400).json({ message: "Invalid OTP request" });
+    }
+
+    if (user.otpCode !== otp) {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+
+    if (user.otpExpiresAt < new Date()) {
+      return res.status(400).json({ message: "OTP expired" });
+    }
+
+    return res.json({ message: "OTP verified successfully" });
+  } catch (error) {
+    console.error("Verify Reset OTP Error:", error);
+    return res.status(500).json({ message: "OTP verification failed" });
+  }
+};
+
+/* ===================== RESET PASSWORD ===================== */
+export const resetPassword = async (req: Request, res: Response) => {
+  try {
+    const { email, newPassword } = req.body;
+
+    if (!email || !newPassword) {
+      return res.status(400).json({ message: "Missing fields" });
+    }
+
+    const passwordHash = await bcrypt.hash(newPassword, 12);
+
+    await prisma.user.update({
+      where: { email },
+      data: {
+        passwordHash,
+        otpCode: null,
+        otpExpiresAt: null,
+      },
+    });
+
+    return res.json({ message: "Password reset successful" });
+  } catch (error) {
+    console.error("Reset Password Error:", error);
+    return res.status(500).json({ message: "Password reset failed" });
   }
 };

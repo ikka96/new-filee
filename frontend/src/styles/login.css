@@ -123,3 +123,19 @@
   font-size: 13px;
   color: #ff6b6b;
 }
+/* Forgot Password hover effect */
+.forgot-password {
+  margin-top: 12px;
+  text-align: right;
+  color: #b98bfd;
+  font-size: 14px;
+  cursor: pointer;          /* 👆 HAND CURSOR */
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+  color: #ff6ad5;
+}
+.forgot-password {
+  transition: color 0.2s ease;
+}

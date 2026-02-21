@@ -53,10 +53,19 @@ const Login = () => {
 
         <button type="submit">Log In</button>
 
+
+        <div className="forgot-wrapper">
+ 
+  <span
+    className="forgot-password"
+    onClick={() => navigate("/forgot-password")}
+  >
+    Forgot Password?
+  </span>
+</div>
+
         <div className="auth-links">
-          <p onClick={() => navigate("/forgot-password")}>
-            Forgot Password?
-          </p>
+       
           <p>
             Don&apos;t have an account?{" "}
             <span onClick={() => navigate("/signup")}>Sign Up</span>

@@ -7,6 +7,10 @@ import OtpVerify from "../pages/OtpVerify";
 import InvoiceUpload from "../pages/InvoiceUpload";
 import Inventory from "../pages/Inventory";
 import Payments from "../pages/Payments";
+import ForgotPassword from "../pages/ForgotPassword";
+import VerifyResetOtp from "../pages/VerifyResetOtp";
+import ResetPassword from "../pages/ResetPassword";
+
 
 const AppRoutes = () => {
   return (
@@ -19,6 +23,9 @@ const AppRoutes = () => {
       <Route path="/upload-invoice" element={<InvoiceUpload />} />
       <Route path="/inventory" element={<Inventory />} />
       <Route path="/payments" element={<Payments />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+<Route path="/verify-reset-otp" element={<VerifyResetOtp />} />
+<Route path="/reset-password" element={<ResetPassword />} />
     </Routes>
   );
 };

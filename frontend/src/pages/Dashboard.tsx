@@ -131,7 +131,7 @@ const Dashboard = () => {
     { title: "Suppliers", value: data.stats.suppliers },
     { title: "Categories", value: data.stats.categories },
     { title: "Invoices", value: data.stats.invoices },
-    
+    { title: "Payments", value: data.stats.payments },
   ];
 
   return (

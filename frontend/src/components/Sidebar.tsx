@@ -9,24 +9,35 @@ const Sidebar = () => {
         bgcolor: "#1e1e2f",
         color: "white",
         height: "100vh",
+        pt: 2,
       }}
     >
       <List>
-        <ListItemButton component={Link} to="/dashboard">
-          <ListItemText primary="Dashboard" />
-        </ListItemButton>
-
-        <ListItemButton component={Link} to="/upload-invoice">
-          <ListItemText primary="Upload Invoice" />
-        </ListItemButton>
-
-        <ListItemButton component={Link} to="/inventory">
-          <ListItemText primary="Inventory" />
-        </ListItemButton>
-
-        <ListItemButton component={Link} to="/payments">
-          <ListItemText primary="Payments" />
-        </ListItemButton>
+        {[
+          { label: "Dashboard", path: "/dashboard" },
+          { label: "Upload Invoice", path: "/upload-invoice" },
+          { label: "Inventory", path: "/inventory" },
+          { label: "Payments", path: "/payments" },
+        ].map((item) => (
+          <ListItemButton
+            key={item.label}
+            component={Link}
+            to={item.path}
+            sx={{
+              "&:hover": {
+                backgroundColor: "#2d2d44",
+              },
+            }}
+          >
+            <ListItemText
+              primary={item.label}
+              primaryTypographyProps={{
+                fontSize: 14,
+                fontWeight: 500,
+              }}
+            />
+          </ListItemButton>
+        ))}
       </List>
     </Box>
   );
