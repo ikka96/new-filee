@@ -1,55 +1,108 @@
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import api from "../api/axios";
+import "../styles/Otp.css";
 
-const OtpVerify = () => {
+const VerifyOtp = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const email = location.state?.email;
+
+  const [otp, setOtp] = useState<string[]>(["", "", "", "", "", ""]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
+
+  if (!email) {
+    navigate("/signup");
+  }
+
+  const handleChange = (value: string, index: number) => {
+    if (!/^\d?$/.test(value)) return;
+
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+
+    if (value && index < 5) {
+      const nextInput = document.getElementById(
+        `otp-${index + 1}`
+      ) as HTMLInputElement;
+      nextInput?.focus();
+    }
+  };
+
+  const handleVerify = async () => {
+    setError(null);
+    const otpValue = otp.join("");
+
+    if (otpValue.length !== 6) {
+      setError("Enter 6 digit OTP");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      await api.post("/auth/verify-otp", {
+        email,
+        otp: otpValue,
+      });
+
+      navigate("/login");
+    } catch (err: any) {
+      setError(err.response?.data?.message || "OTP verification failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResend = async () => {
+    try {
+      setResendLoading(true);
+      await api.post("/auth/resend-otp", { email });
+    } finally {
+      setResendLoading(false);
+    }
+  };
+
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#f5f5f5",
-      }}
-    >
-      <Box
-        sx={{
-          width: 360,
-          p: 4,
-          backgroundColor: "#fff",
-          borderRadius: 2,
-          boxShadow: 3,
-          textAlign: "center",
-        }}
-      >
-        <Typography variant="h4" gutterBottom>
-          OTP Verification
-        </Typography>
+    <div className="otp-page">
+      <div className="otp-card">
+        <h2>Enter OTP</h2>
+        <p className="otp-subtitle">
+          We have sent a verification code to<br />
+          <span>{email}</span>
+        </p>
 
-        <Typography variant="body2" sx={{ mb: 2 }}>
-          Enter the 6-digit OTP sent to your registered email
-        </Typography>
+        <div className="otp-inputs">
+          {otp.map((digit, index) => (
+            <input
+              key={index}
+              id={`otp-${index}`}
+              value={digit}
+              onChange={(e) => handleChange(e.target.value, index)}
+              maxLength={1}
+            />
+          ))}
+        </div>
 
-        <TextField
-          fullWidth
-          label="Enter OTP"
-          inputProps={{ maxLength: 6 }}
-          margin="normal"
-        />
+        {error && <div className="otp-error">{error}</div>}
 
-        <Button
-          fullWidth
-          variant="contained"
-          sx={{ mt: 2 }}
-        >
-          Verify OTP
-        </Button>
+        <button className="otp-btn" onClick={handleVerify} disabled={loading}>
+          {loading ? "Verifying..." : "Verify"}
+        </button>
 
-        <Typography variant="body2" sx={{ mt: 2 }}>
-          Didn’t receive OTP? Resend
-        </Typography>
-      </Box>
-    </Box>
+        <p className="resend-text">
+          Didn’t receive a code?{" "}
+          <span onClick={handleResend}>
+            {resendLoading ? "Sending..." : "Resend"}
+          </span>
+        </p>
+      </div>
+    </div>
   );
 };
 
-export default OtpVerify;
+export default VerifyOtp;

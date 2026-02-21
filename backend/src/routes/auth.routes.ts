@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { signup, login } from "../controllers/auth.controller";
+import { signup, login, verifyOtp } from "../controllers/auth.controller";
 
 const router = Router();
 
-// Public auth routes
 router.post("/signup", signup);
+router.post("/verify-otp", verifyOtp);
 router.post("/login", login);
 
 export default router;

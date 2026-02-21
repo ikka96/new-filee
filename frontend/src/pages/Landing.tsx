@@ -1,120 +1,218 @@
-import { useEffect } from "react";
+import React from "react";
+import {
+  Box,
+  Typography,
+  Button,
+  Container,
+  Stack,
+  Avatar,
+  Paper,
+  Grid
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import "../styles/Landing.css";
 
-const Landing = () => {
+const LandingPage = () => {
   const navigate = useNavigate();
 
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  // Scroll reveal
-  useEffect(() => {
-    const els = document.querySelectorAll(".reveal");
-    const onScroll = () => {
-      els.forEach(el => {
-        if (el.getBoundingClientRect().top < window.innerHeight - 80) {
-          el.classList.add("active");
-        }
-      });
-    };
-    window.addEventListener("scroll", onScroll);
-    onScroll();
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
   return (
-    <div className="landing-root">
+    <Box
+      sx={{
+        bgcolor: "#000",
+        minHeight: "100vh",
+        color: "#fff",
+        overflowX: "hidden",
+        fontFamily: "sans-serif",
+      }}
+    >
+      {/* ================= Navigation Bar ================= */}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          pt: 4,
+          px: 2,
+          position: "relative",
+          zIndex: 10,
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            width: "100%",
+            maxWidth: "900px",
+            bgcolor: "rgba(20, 20, 20, 0.6)",
+            backdropFilter: "blur(10px)",
+            border: "1px solid rgba(255,255,255,0.05)",
+            borderRadius: "50px",
+            px: 3,
+            py: 1.5,
+          }}
+        >
+          {/* Logo */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Box
+              sx={{
+                width: 24,
+                height: 32,
+                border: "2px solid #fff",
+                borderRadius: "12px 12px 4px 4px",
+                opacity: 0.8,
+              }}
+            />
+            <Typography sx={{ fontWeight: 600 }}>SIA</Typography>
+          </Box>
 
-      {/* ================= NAVBAR ================= */}
-      <nav className="landing-nav">
-        <div className="nav-left">💡</div>
+          {/* Nav Links */}
+          <Stack direction="row" spacing={4} sx={{ display: { xs: "none", md: "flex" } }}>
+            {["About", "Help", "Contact", "Pricing"].map((text) => (
+              <Typography
+                key={text}
+                variant="body2"
+                sx={{
+                  cursor: "pointer",
+                  color: "#a1a1aa",
+                  "&:hover": { color: "#fff" },
+                }}
+              >
+                {text}
+              </Typography>
+            ))}
+          </Stack>
 
-        <div className="nav-center">
-          <button onClick={() => scrollTo("home")}>Home</button>
-          <button onClick={() => scrollTo("dashboard")}>Dashboard</button>
-          <button onClick={() => scrollTo("pricing")}>Pricing</button>
-          <button onClick={() => scrollTo("contact")}>Contact</button>
-        </div>
-
-        <div className="nav-right">
-          <button className="nav-cta" onClick={() => navigate("/signup")}>
+          {/* CTA */}
+          <Button
+            variant="contained"
+            onClick={() => navigate("/signup")}
+            sx={{
+              bgcolor: "rgba(147, 51, 234, 0.2)",
+              color: "#d8b4fe",
+              border: "1px solid rgba(147, 51, 234, 0.5)",
+              borderRadius: "20px",
+              textTransform: "none",
+              "&:hover": { bgcolor: "rgba(147, 51, 234, 0.4)" },
+            }}
+          >
             Get Started
-          </button>
-        </div>
-      </nav>
+          </Button>
+        </Box>
+      </Box>
 
-      {/* ================= HERO ================= */}
-      <section id="home" className="hero-section">
-        <div className="hero-visual">
-          <div className="globe glow-pulse"></div>
-          <div className="ring ring-1 ring-spin"></div>
-          <div className="ring ring-2 ring-spin-reverse"></div>
-          <div className="ring ring-3 ring-fade"></div>
-        </div>
+      {/* ================= Hero Section ================= */}
+      <Box sx={{ position: "relative", textAlign: "center", pt: 15, pb: 10, px: 2 }}>
+        {/* Glow */}
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: "600px",
+            height: "600px",
+            background:
+              "radial-gradient(circle, rgba(126,34,206,0.6) 0%, rgba(0,0,0,0) 60%)",
+            zIndex: 0,
+            pointerEvents: "none",
+          }}
+        />
 
-        <div className="hero-content reveal">
-          <h1 className="hero-title floating gradient-text">
-            Smart Stock
-          </h1>
+        <Container maxWidth="md" sx={{ position: "relative", zIndex: 1 }}>
+          <Typography
+            variant="h1"
+            sx={{
+              fontWeight: 800,
+              fontSize: { xs: "3.5rem", md: "6.5rem" },
+              letterSpacing: "-0.05em",
+              background: "linear-gradient(to bottom, #ffffff, #a1a1aa)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              mb: 3,
+            }}
+          >
+            Smart Inventory Automation
+          </Typography>
 
-          <p className="hero-subtitle floating-delay">
-            AI-powered inventory automation to track, predict,
-            and optimize stock effortlessly.
-          </p>
+          <Typography
+            variant="body1"
+            sx={{
+              color: "#a1a1aa",
+              maxWidth: "600px",
+              mx: "auto",
+              mb: 4,
+              fontSize: "1.1rem",
+              lineHeight: 1.6,
+            }}
+          >
+            Automate invoice processing, track inventory in real time, and
+            eliminate manual errors using AI-powered OCR technology.
+          </Typography>
 
-          <button className="hero-btn" onClick={() => navigate("/signup")}>
+          <Button
+            variant="contained"
+            onClick={() => navigate("/signup")}
+            sx={{
+              bgcolor: "#fff",
+              color: "#000",
+              borderRadius: "30px",
+              px: 4,
+              py: 1.5,
+              fontWeight: "bold",
+              textTransform: "none",
+              "&:hover": { bgcolor: "#e4e4e7" },
+            }}
+          >
             Get Started
-          </button>
-        </div>
-      </section>
+          </Button>
+        </Container>
+      </Box>
 
-      {/* ================= DASHBOARD ================= */}
-      <section id="dashboard" className="dashboard-section reveal">
-        <h2>Dashboard Preview</h2>
-        <div className="dashboard-mock">
-          <div className="chart"></div>
-          <div className="stats">
-            <div className="stat-card">Total Stock</div>
-            <div className="stat-card">Low Alerts</div>
-            <div className="stat-card">Invoices</div>
-          </div>
-        </div>
-      </section>
-
-      {/* ================= PRICING ================= */}
-      <section id="pricing" className="pricing-section reveal">
-        <h2>Pricing Plans</h2>
-        <div className="pricing-cards">
-          <div className="price-card">
-            <h3>Starter</h3>
-            <p className="price">₹0</p>
-          </div>
-          <div className="price-card featured">
-            <h3>Pro</h3>
-            <p className="price">₹999 / month</p>
-          </div>
-          <div className="price-card">
-            <h3>Enterprise</h3>
-            <p className="price">Custom</p>
-          </div>
-        </div>
-      </section>
-
-      {/* ================= CONTACT ================= */}
-      <section id="contact" className="contact-section reveal">
-        <h2>Contact Us</h2>
-        <p>Email: support@sia-system.com</p>
-        <p>Phone: +91 9XXXXXXXXX</p>
-        <p>Bengaluru, India</p>
-      </section>
-
-      <footer className="landing-footer">
-        © 2026 Smart Inventory Automation (SIA)
-      </footer>
-    </div>
+      {/* ================= Testimonials ================= */}
+      <Container maxWidth="lg" sx={{ pt: 10, pb: 10 }}>
+        <Grid container spacing={4} justifyContent="center">
+          {[
+            {
+              name: "Alec Whitten",
+              role: "CTO @ Tech Solutions",
+              text:
+                "Our inventory accuracy improved significantly after adopting SIA.",
+            },
+            {
+              name: "Sophia Perez",
+              role: "Operations Head",
+              text:
+                "Invoice automation saved hours of manual work every week.",
+            },
+          ].map((t, i) => (
+            <Grid item xs={12} sm={6} md={5} key={i}>
+              <Paper
+                sx={{
+                  bgcolor: "rgba(20,20,20,0.5)",
+                  border: "1px solid rgba(255,255,255,0.05)",
+                  borderRadius: "16px",
+                  p: 3,
+                  color: "#fff",
+                }}
+              >
+                <Typography sx={{ mb: 3, color: "#d4d4d8" }}>
+                  “{t.text}”
+                </Typography>
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <Avatar sx={{ bgcolor: "#7e22ce" }}>{t.name[0]}</Avatar>
+                  <Box>
+                    <Typography fontWeight="bold">{t.name}</Typography>
+                    <Typography variant="caption" color="#a1a1aa">
+                      {t.role}
+                    </Typography>
+                  </Box>
+                </Stack>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+    </Box>
   );
 };
 
-export default Landing;
+export default LandingPage;
