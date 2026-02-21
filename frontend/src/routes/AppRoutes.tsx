@@ -14,7 +14,7 @@ const AppRoutes = () => {
       <Route path="/" element={<Landing />} />
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
-      <Route path="/otp" element={<OtpVerify />} />
+      <Route path="/verify-otp" element={<OtpVerify />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/upload-invoice" element={<InvoiceUpload />} />
       <Route path="/inventory" element={<Inventory />} />

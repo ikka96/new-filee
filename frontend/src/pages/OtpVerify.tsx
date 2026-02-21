@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "../api/axios";
-import "../styles/Otp.css";
+import "../styles/OtpVerify.css";
 
 const VerifyOtp = () => {
   const navigate = useNavigate();

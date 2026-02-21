@@ -60,7 +60,7 @@ const Signup = () => {
         password: form.password,
       });
 
-      navigate("/verify-otp", {
+      navigate("/Verify-otp", {
         state: { email: form.email },
       });
     } catch (err: any) {
